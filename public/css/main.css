@@ -1,0 +1,48 @@
+/* super reset */
+*{ margin: 0; padding: 0; }
+
+*, *:before, *:after {
+  -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
+ }
+
+body{
+  background: #eaeaea;
+  text-align: center;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 24px;
+}
+
+.container{
+  margin: 20px auto;
+  width: 720px;
+  text-align: left;
+}
+
+ul.todos{
+  list-style: none;
+  background: rgba(255, 255, 255, .9);
+}
+
+  ul.todos li{
+    height: 58px;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-bottom: 1px dotted #ccc;
+  }
+    ul.todos li:hover{
+      background: #FFF;
+    }
+
+    ul.todos li.done{
+      color: #999
+    }
+      ul.todos li.done:hover{
+        cursor: default;
+      }
+
+
+form input{
+  width: 100%;
+  height: 34px;
+  font-size: 20px;
+}
