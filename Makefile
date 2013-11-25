@@ -1,4 +1,4 @@
-CFLAGS  = -W -Wall -I. -pthread -g -pipe $(COPT)
+CFLAGS  = -W -Wall -I.
 LIBS = -lsqlite3 -ljson-c
 
 all:

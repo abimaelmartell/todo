@@ -13,3 +13,7 @@ void todos_index(struct mg_connection *conn, const struct mg_request_info *reque
     (int) strlen(todos), todos
   );
 }
+
+
+void todos_create(struct mg_connection *conn, const struct mg_request_info *request_info){
+}
