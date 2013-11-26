@@ -10,7 +10,7 @@ MONGOOSE_HOME = vendor/mongoose
 MONGOOSE_INC = $(MONGOOSE_HOME)
 MONGOOSE_SOURCE = $(MONGOOSE_HOME)/mongoose.c
 
-CFLAGS  = -W -Wall -I. -I$(JSON_INC) -I$(SQLITE_INC)
+CFLAGS  = -W -Wall -I. -I$(JSON_INC) -I$(SQLITE_INC) -I$(MONGOOSE_INC)
 LIBS =  -lpthread -ldl -lc -ldl $(JSON_LIB)
 TARGET = todo
 

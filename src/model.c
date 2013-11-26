@@ -77,3 +77,33 @@ json_object *todo_findByID(int todo_id){
   sqlite3_close(db);
   return todo;
 }
+
+json_object *todo_updateAttributes(json_object *todo){
+  json_object *id, *text, *status;
+  sqlite3 *db;
+  char sql[1000], *errBuf;
+  int rc;
+
+  id = json_object_object_get(todo, "id");
+  text = json_object_object_get(todo, "text");
+  status = json_object_object_get(todo, "status");
+
+  db = getSQLConn();
+
+  sprintf(sql,
+    "UPDATE todos SET text='%s', status='%d' WHERE id='%d'",
+    json_object_get_string(text),
+    json_object_get_int(status),
+    json_object_get_int(id)
+  );
+
+  rc = sqlite3_exec(db, sql, NULL, NULL, &errBuf);
+
+  if(rc != SQLITE_OK){
+    printf("SQL Error: %s\n", errBuf);
+    return NULL;
+  }
+
+  sqlite3_close(db);
+  return todo;
+}

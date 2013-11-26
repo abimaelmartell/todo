@@ -2,9 +2,10 @@
 
 #include <stdio.h>
 #include <string.h>
-#include "vendor/mongoose/mongoose.h"
+#include <mongoose.h>
 #include <sqlite3.h>
 #include <json.h>
+#include <regex.h>
 
 #include "model.h"
 #include "actions.h"

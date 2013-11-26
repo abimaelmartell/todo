@@ -5,5 +5,9 @@ var app = app || {};
       text: '',
       status: ''
     },
+    changeStatus: function(){
+      var newStatus = this.get("status") == 0 ? 1 : 0;
+      this.save({ status: newStatus });
+    }
   });
 })();
