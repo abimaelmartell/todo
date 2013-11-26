@@ -28,7 +28,10 @@ var app = app || {};
       }else{
         event.preventDefault();
       }
-      app.Todos.create({ text: $("#todo-text").val() });
+      var text = $("#todo-text").val().trim();
+      if(text == "")
+        return;
+      app.Todos.create({ text: text });
       $("#todo-text").val('');
     }
   });

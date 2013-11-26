@@ -17,12 +17,13 @@
       </ul>
     </div>
     <script type="text/template" id="todo-template">
-        <% if(status == 0){ %>
-        <i class="fa fa-square-o"></i>
-        <% }else{ %>
-        <i class="fa fa-check-square-o"></i>
-        <% } %>
-        <span><%- text %></span>
+      <% if(status == 0){ %>
+        <i class="fa fa-square-o check"></i>
+      <% }else{ %>
+        <i class="fa fa-check-square-o check "></i>
+      <% } %>
+      <span><%- text %></span>
+      <input type="text" value="<%- text %>" />
     </script>
     <script src="js/vendor/jquery.js"></script>
     <script src="js/vendor/underscore.js"></script>
