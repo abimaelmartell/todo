@@ -2,7 +2,7 @@
 
 #include "todo.h"
 
-char *todo_findAll(){
+json_object *todo_findAll(){
   sqlite3_stmt *stmt;
   json_object *todos, *todo, *id, *text, *status;
   int rc;
@@ -26,12 +26,12 @@ char *todo_findAll(){
   }
 
   sqlite3_close(db);
-  return strdup(json_object_to_json_string(todos));
+  return todos;
 }
 
 int todo_create(char *text){
   char sql[1000], *errBuf;
-  int rc;
+  int rc, return_id;
 
   sqlite3 *db = getSQLConn();
 
@@ -41,9 +41,39 @@ int todo_create(char *text){
 
   if(rc != SQLITE_OK){
     printf("SQL Error: %s\n", errBuf);
-    return 1;
+    return -1;
   }
 
+  return_id = sqlite3_last_insert_rowid(db);
+
   sqlite3_close(db);
-  return 0;
+  return return_id;
+}
+
+json_object *todo_findByID(int todo_id){
+  char sql[1000];
+  int rc;
+  sqlite3_stmt *stmt;
+  json_object *todo = json_object_new_object(), *id, *text, *status;
+
+  sqlite3 *db = getSQLConn();
+  sprintf(sql, "SELECT * FROM todos WHERE id=%d", todo_id);
+
+  rc = sqlite3_prepare_v2(db, sql, sizeof(sql), &stmt, NULL);
+  if(sqlite3_step(stmt) == SQLITE_ERROR){
+    printf("SQL Error: %s\n", sqlite3_errmsg(db));
+    return NULL;
+  }else{
+    id = json_object_new_int(sqlite3_column_int(stmt, 0));
+    text = json_object_new_string((const char *)sqlite3_column_text(stmt, 1));
+    status = json_object_new_int(sqlite3_column_int(stmt, 2));
+
+    json_object_object_add(todo, "id", id);
+    json_object_object_add(todo, "text", text);
+    json_object_object_add(todo, "status", status);
+  }
+
+  sqlite3_finalize(stmt);
+  sqlite3_close(db);
+  return todo;
 }

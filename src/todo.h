@@ -9,7 +9,7 @@
 #include "model.h"
 #include "actions.h"
 
-#define TODO_CREATE_URL "/todos/create"
+#define TODO_CREATE_URL "/todos"
 #define TODO_LIST_URL   "/todos"
 
 extern int event_handler(struct mg_event *event);

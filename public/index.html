@@ -10,11 +10,18 @@
     <div class="container">
       <h1>Todo List</h1>
       <form action="todos/create" method="post">
-        <input class="form-control" type="text" name="text" placeholder="What needs to be done?"  required autofocus />
+        <input id="todo-text" class="form-control" type="text" name="text" placeholder="What needs to be done?" required="true" autofocus="true"/>
       </form>
       <ul class="todos">
       </ul>
     </div>
+    <script src="js/vendor/jquery.js"></script>
+    <script src="js/vendor/underscore.js"></script>
+    <script src="js/vendor/backbone.js"></script>
+    <script src="js/todo-model.js"></script>
+    <script src="js/todo-view.js"></script>
+    <script src="js/todos-collection.js"></script>
+    <script src="js/app-view.js"></script>
     <script src="js/app.js"></script>
   </body>
 </html>

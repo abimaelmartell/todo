@@ -8,11 +8,14 @@ int event_handler(struct mg_event *event){
 
   if (event->type != MG_REQUEST_BEGIN) return 0;
 
-  if(strcmp(request_info->uri, TODO_LIST_URL) == 0){
-    todos_index(conn, request_info);
+  printf("[%s] %s\n", request_info->request_method, request_info->uri);
+
+  if(strcmp(request_info->uri, TODO_LIST_URL) == 0 &&
+          strcmp(request_info->request_method, "GET") == 0){
+    todos_index(conn);
   }else if(strcmp(request_info->uri, TODO_CREATE_URL) == 0 &&
           strcmp(request_info->request_method, "POST") == 0){
-    todos_create(conn, request_info);
+    todos_create(conn);
   }
 
   return 0;
