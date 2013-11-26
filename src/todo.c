@@ -12,7 +12,7 @@ int event_handler(struct mg_event *event){
 
   printf("[%s] %s\n", request_info->request_method, request_info->uri);
 
-  rc = regcomp(&regex, "^\\/todos\\/[[:digit:]]", 0);
+  rc = regcomp(&regex, TODO_UPDATE_REGEX, 0);
 
   if(strcmp(request_info->uri, TODO_LIST_URL) == 0 &&
           strcmp(request_info->request_method, "GET") == 0){

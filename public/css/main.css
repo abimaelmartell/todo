@@ -36,10 +36,6 @@ ul.todos{
     ul.todos li.done{
       color: #999
     }
-      ul.todos li.done:hover{
-        cursor: default;
-      }
-
 
 form input{
   width: 100%;
