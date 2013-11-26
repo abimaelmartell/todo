@@ -7,9 +7,20 @@ var app = app || {};
     },
     initialize: function(){
       this.listenTo(app.Todos, 'add', this.addOne);
+      this.listenTo(app.Todos, 'all', this.render);
+      this.listenTo(app.Todos, 'reset', this.addAll);
+
       app.Todos.fetch({reset: true});
     },
+    render: function(){
+    },
     addOne: function(todo){
+      var todoView = new app.TodoView({ model: todo });
+      $("ul.todos").prepend(todoView.render().el);
+    },
+    addAll: function(){
+      $("ul.todos").html();
+      app.Todos.each(this.addOne, this);
     },
     createTodo: function(event){
       if(event.which != 13){
@@ -18,6 +29,7 @@ var app = app || {};
         event.preventDefault();
       }
       app.Todos.create({ text: $("#todo-text").val() });
+      $("#todo-text").val('');
     }
   });
 })();
