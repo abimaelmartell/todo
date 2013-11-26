@@ -4,7 +4,7 @@
 #include <string.h>
 #include "vendor/mongoose/mongoose.h"
 #include <sqlite3.h>
-#include <json-c/json.h>
+#include <json.h>
 
 #include "model.h"
 #include "actions.h"
