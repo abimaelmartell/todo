@@ -51,7 +51,7 @@ void todos_create(struct mg_connection *conn){
 
 void todos_update(struct mg_connection *conn){
   char post_data[1024];
-  int post_len, id;
+  int post_len;
   json_object *data, *todo;
 
   post_len = mg_read(conn, post_data, sizeof(post_data));
