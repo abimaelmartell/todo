@@ -34,7 +34,8 @@ ul.todos{
     }
 
     ul.todos li.done{
-      color: #999
+      color: #999;
+      text-decoration: line-through;
     }
 
     ul.todos li .check{
