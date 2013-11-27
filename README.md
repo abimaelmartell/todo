@@ -1,13 +1,10 @@
 # Todo List in C
-This is a example of web development in C.
+Todo List using [mongoose](https://github.com/cesanta/mongoose/), [Backbone](https://github.com/jashkenas/backbone) and [SQLite3](http://sqlite.org/)
 
 # Get Started
-To compile, you need the folowing dependencies installed on your system.
-- SQLite3
-- json-c
+Dependencies are included as git submodules, you may need GNU Autotools to compile some dependencies.
 
-Then run the following commands
-
+To compile this app just run
 ```sh
 ./configure
 make
