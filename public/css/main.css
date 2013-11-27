@@ -10,6 +10,7 @@ body{
   text-align: center;
   font-family: 'Open Sans', sans-serif;
   font-size: 24px;
+  margin-bottom: 50px;
 }
 
 .container{
@@ -65,4 +66,12 @@ form input{
   padding: 0 0 0 15px;
   background-color: transparent;
   border-bottom: 1px solid #bbb;
+}
+
+#delete-completed{
+  display: inline-block;
+  float: right;
+  font-size: 14px;
+  color: #000;
+  text-decoration: none;
 }
