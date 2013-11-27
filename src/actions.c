@@ -73,5 +73,11 @@ void todos_update(struct mg_connection *conn, int todo_id){
 }
 
 void todos_delete(struct mg_connection *conn, int todo_id){
-  todo_destroy(todo_id);
+  int rc = todo_destroy(todo_id);
+  mg_printf(conn,
+    "HTTP/1.1 200 OK\r\n"
+    "Content-Type: application/json; charset=utf-8\r\n"
+    "Content-Length: 0\r\n"
+    "\r\n"
+  );
 }
