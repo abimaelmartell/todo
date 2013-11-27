@@ -49,7 +49,7 @@ void todos_create(struct mg_connection *conn){
   }
 }
 
-void todos_update(struct mg_connection *conn){
+void todos_update(struct mg_connection *conn, int todo_id){
   char post_data[1024];
   int post_len;
   json_object *data, *todo;
@@ -58,7 +58,7 @@ void todos_update(struct mg_connection *conn){
 
   data = json_tokener_parse(post_data);
 
-  todo = todo_updateAttributes(data);
+  todo = todo_updateAttributes(todo_id, data);
 
   const char *todo_string = json_object_to_json_string(todo);
 
@@ -69,5 +69,15 @@ void todos_update(struct mg_connection *conn){
     "\r\n"
     "%s",
     (int) strlen(todo_string), todo_string
+  );
+}
+
+void todos_delete(struct mg_connection *conn, int todo_id){
+  int rc = todo_destroy(todo_id);
+  mg_printf(conn,
+    "HTTP/1.1 200 OK\r\n"
+    "Content-Type: application/json; charset=utf-8\r\n"
+    "Content-Length: 0\r\n"
+    "\r\n"
   );
 }

@@ -3,7 +3,8 @@ var app = app || {};
   app.AppView = Backbone.View.extend({
     el: '.container',
     events: {
-      'keypress #todo-text': 'createTodo'
+      'keypress #todo-text': 'createTodo',
+      'click #delete-completed': 'deleteCompleted'
     },
     initialize: function(){
       this.listenTo(app.Todos, 'add', this.addOne);
@@ -33,6 +34,9 @@ var app = app || {};
         return;
       app.Todos.create({ text: text });
       $("#todo-text").val('');
+    },
+    deleteCompleted: function(){
+      _.invoke(app.Todos.completed(), 'destroy');
     }
   });
 })();
