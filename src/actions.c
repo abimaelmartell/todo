@@ -73,5 +73,5 @@ void todos_update(struct mg_connection *conn, int todo_id){
 }
 
 void todos_delete(struct mg_connection *conn, int todo_id){
-  printf("TODO id -> %d\n", todo_id);
+  todo_destroy(todo_id);
 }

@@ -100,9 +100,32 @@ json_object *todo_updateAttributes(int todo_id, json_object *todo){
 
   if(rc != SQLITE_OK){
     printf("SQL Error: %s\n", errBuf);
+    sqlite3_close(db);
     return NULL;
   }
 
   sqlite3_close(db);
   return todo;
 }
+
+int todo_destroy(int todo_id){
+  sqlite3 *db;
+  int rc;
+  char sql[1000], *errBuf;
+
+  db = getSQLConn();
+
+  sprintf(sql, "DELETE FROM todos WHERE id=%d", todo_id);
+
+  rc = sqlite3_exec(db, sql, NULL, NULL, &errBuf);
+
+  if(rc != SQLITE_OK){
+    printf("SQL Error: %s\n", errBuf);
+    sqlite3_close(db);
+    return -1;
+  }
+
+  sqlite3_close(db);
+  return 0;
+}
+

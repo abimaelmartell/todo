@@ -7,3 +7,4 @@ extern json_object *todo_findAll();
 extern int todo_create(char *text);
 extern json_object *todo_findByID(int todo_id);
 extern json_object *todo_updateAttributes(int todo_id, json_object *attributes);
+extern int todo_destroy(int todo_id);

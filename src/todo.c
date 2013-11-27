@@ -7,7 +7,7 @@ int event_handler(struct mg_event *event){
   struct mg_connection *conn = event->conn;
   regex_t regex;
   int rc;
-  char *override_method;
+  const char *override_method;
 
   if (event->type != MG_REQUEST_BEGIN) return 0;
 
