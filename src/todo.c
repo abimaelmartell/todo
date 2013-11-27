@@ -2,6 +2,15 @@
 
 #include "todo.h"
 
+sqlite3 *db;
+struct mg_context *ctx;
+
+static const char *options[] = {
+  "document_root", "public",
+  "listening_ports", "3000",
+  NULL
+};
+
 int event_handler(struct mg_event *event){
   struct mg_request_info *request_info = event->request_info;
   struct mg_connection *conn = event->conn;
@@ -40,16 +49,20 @@ int event_handler(struct mg_event *event){
   return 0;
 }
 
-sqlite3 *getSQLConn(){
-  sqlite3 *db;
+void initialize(){
   int rc;
 
   rc = sqlite3_open("data/todos.db", &db);
   if(rc){
     printf("Cant open database %s\n", sqlite3_errmsg(db));
     sqlite3_close(db);
-    return NULL;
+    return;
   }
 
-  return db;
+  ctx = mg_start(options, &event_handler, NULL);
+}
+
+void term(){
+  sqlite3_close(db);
+  mg_stop(ctx);
 }

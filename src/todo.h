@@ -16,5 +16,8 @@
 
 #define HTTP_METHOD_HEADER "X-HTTP-Method-Override"
 
+extern sqlite3 *db;
+extern struct mg_context *ctx;
 extern int event_handler(struct mg_event *event);
-extern sqlite3 *getSQLConn();
+extern void initialize(void);
+extern void term(void);

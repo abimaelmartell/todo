@@ -3,11 +3,11 @@
 #include "todo.h"
 
 json_object *todo_findAll(){
+  sqlite3_mutex_enter(sqlite3_db_mutex(db));
   sqlite3_stmt *stmt;
   json_object *todos, *todo, *id, *text, *status;
   int rc;
 
-  sqlite3 *db = getSQLConn();
   todos = json_object_new_array();
 
   char sql[] = "SELECT * FROM todos";
@@ -25,7 +25,7 @@ json_object *todo_findAll(){
     json_object_array_add(todos, todo);
   }
 
-  sqlite3_close(db);
+  sqlite3_mutex_leave(sqlite3_db_mutex(db));
   return todos;
 }
 
@@ -33,7 +33,7 @@ int todo_create(char *text){
   char sql[1000], *errBuf;
   int rc, return_id;
 
-  sqlite3 *db = getSQLConn();
+  sqlite3_mutex_enter(sqlite3_db_mutex(db));
 
   sprintf(sql, "INSERT INTO todos (text) VALUES ('%s')", text);
 
@@ -46,7 +46,7 @@ int todo_create(char *text){
 
   return_id = sqlite3_last_insert_rowid(db);
 
-  sqlite3_close(db);
+  sqlite3_mutex_leave(sqlite3_db_mutex(db));
   return return_id;
 }
 
@@ -56,7 +56,7 @@ json_object *todo_findByID(int todo_id){
   sqlite3_stmt *stmt;
   json_object *todo = json_object_new_object(), *id, *text, *status;
 
-  sqlite3 *db = getSQLConn();
+  sqlite3_mutex_enter(sqlite3_db_mutex(db));
   sprintf(sql, "SELECT * FROM todos WHERE id=%d", todo_id);
 
   rc = sqlite3_prepare_v2(db, sql, sizeof(sql), &stmt, NULL);
@@ -74,20 +74,20 @@ json_object *todo_findByID(int todo_id){
   }
 
   sqlite3_finalize(stmt);
-  sqlite3_close(db);
+  sqlite3_mutex_leave(sqlite3_db_mutex(db));
+
   return todo;
 }
 
 json_object *todo_updateAttributes(int todo_id, json_object *todo){
   json_object *text, *status;
-  sqlite3 *db;
   char sql[1000], *errBuf;
   int rc;
 
   text = json_object_object_get(todo, "text");
   status = json_object_object_get(todo, "status");
 
-  db = getSQLConn();
+  sqlite3_mutex_enter(sqlite3_db_mutex(db));
 
   sprintf(sql,
     "UPDATE todos SET text='%s', status='%d' WHERE id='%d'",
@@ -104,16 +104,15 @@ json_object *todo_updateAttributes(int todo_id, json_object *todo){
     return NULL;
   }
 
-  sqlite3_close(db);
+  sqlite3_mutex_leave(sqlite3_db_mutex(db));
   return todo;
 }
 
 int todo_destroy(int todo_id){
-  sqlite3 *db;
   int rc;
   char sql[1000], *errBuf;
 
-  db = getSQLConn();
+  sqlite3_mutex_enter(sqlite3_db_mutex(db));
 
   sprintf(sql, "DELETE FROM todos WHERE id=%d", todo_id);
 
@@ -125,7 +124,7 @@ int todo_destroy(int todo_id){
     return -1;
   }
 
-  sqlite3_close(db);
+  sqlite3_mutex_leave(sqlite3_db_mutex(db));
   return 0;
 }
 
