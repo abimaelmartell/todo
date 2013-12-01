@@ -22,7 +22,7 @@ all: default
 
 $(JSON_LIB):
 	cd $(JSON_HOME) && make clean
-	cd $(JSON_HOME); ./autogen.sh; ./configure; make
+	cd $(JSON_HOME) && ./autogen.sh && ./configure && make
 
 $(TARGET): $(JSON_LIB)
 	$(CC) src/main.c src/model.c src/actions.c src/todo.c $(MONGOOSE_SOURCE) $(SQLITE_SOURCE) -o $(TARGET) $(CFLAGS) $(LIBS)
