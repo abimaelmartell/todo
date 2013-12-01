@@ -22,7 +22,7 @@ int event_handler(struct mg_event *event){
 
   override_method = mg_get_header(conn, HTTP_METHOD_HEADER);
 
-  printf("\e[0;32m[%s]\e[0m %s\n",
+  printf("\x1B[0;32m[%s]\x1B[0m %s\n",
     override_method ? override_method : request_info->request_method,
     request_info->uri
   );
