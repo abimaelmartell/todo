@@ -21,7 +21,7 @@ default: $(JSON_LIB) $(TARGET)
 all: default
 
 $(JSON_LIB):
-	cd $(JSON_HOME) && make clean
+	-cd $(JSON_HOME) && make clean
 	cd $(JSON_HOME) && ./autogen.sh && ./configure && make
 
 $(TARGET): $(JSON_LIB)
