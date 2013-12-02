@@ -14,3 +14,5 @@ make
 
 ### Integration
 Integration tests are written entirely in ruby, using the rspec gem and the httparty gem to do http requests.
+
+To run the integration tests you need tu run the app `./todo` then run `rspec`.
