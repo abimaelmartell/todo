@@ -12,6 +12,14 @@ def post url, options
   HTTParty.post BASE_URL + url, options
 end
 
+def put url, options
+  HTTParty.put BASE_URL + url, options
+end
+
+def delete url
+  HTTParty.delete BASE_URL + url
+end
+
 describe 'Integration' do
   describe 'GET /' do
     it 'returns successful response' do
@@ -46,6 +54,41 @@ describe 'Integration' do
       res = post '/todos', body: todo.to_json
       todo_json = JSON.parse(res.body)
       todo_json['text'].should eq(todo[:text])
+    end
+  end
+
+  describe 'PUT /todos/[:id]' do
+    it 'should update an existing todo' do
+      todo = JSON.parse(post('/todos', body: { text: 'this is an existing todo' }.to_json).body)
+
+      updated = JSON.parse(put("/todos/#{todo['id']}", body: { text: 'new text', status: 1 }.to_json).body)
+
+      updated['status'].should eq(1)
+      updated['text'].should eq('new text')
+    end
+  end
+
+  describe 'DELETE /todos/[:id]' do
+    it 'should delete an existing todo' do
+      todo = JSON.parse(post('/todos', body: { text: 'this is an existing todo' }.to_json).body)
+
+      delete "/todos/#{todo['id']}"
+
+      res = get "/todos/#{todo['id']}"
+      res.code.should eq(404)
+    end
+  end
+
+  describe 'GET /todos/[:id]' do
+    it 'should render an existing todo' do
+      todo = JSON.parse(post('/todos', body: { text: 'this is an existing todo' }.to_json).body)
+      
+      res = get "/todos/#{todo['id']}"
+      todo_json = JSON.parse res.body
+
+      res.code.should eq(200)
+      res.content_type.should eq('application/json')
+      todo_json['text'].should eq('this is an existing todo')
     end
   end
 end
