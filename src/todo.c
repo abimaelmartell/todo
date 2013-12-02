@@ -19,7 +19,7 @@ int event_handler(struct mg_event *event){
 
   if (event->type != MG_REQUEST_BEGIN) return 0;
 
-  printf("\e[0;32m[%s]\e[0m %s\n",
+  printf("\x1B[0;32m[%s]\x1B[0m %s\n",
     request_info->request_method,
     request_info->uri
   );
