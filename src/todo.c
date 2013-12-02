@@ -16,14 +16,11 @@ int event_handler(struct mg_event *event){
   struct mg_connection *conn = event->conn;
   regex_t regex;
   int rc;
-  const char *override_method;
 
   if (event->type != MG_REQUEST_BEGIN) return 0;
 
-  override_method = mg_get_header(conn, HTTP_METHOD_HEADER);
-
   printf("\e[0;32m[%s]\e[0m %s\n",
-    override_method ? override_method : request_info->request_method,
+    request_info->request_method,
     request_info->uri
   );
 
@@ -37,9 +34,9 @@ int event_handler(struct mg_event *event){
     todos_create(conn);
   }else if(regexec(&regex, request_info->uri, 0, NULL, 0) == 0){
     int todo_id = atoi(&request_info->uri[7]);
-    if(strcmp(override_method, "PUT") == 0){
+    if(strcmp(request_info->request_method, "PUT") == 0){
       todos_update(conn, todo_id);
-    }else if(strcmp(override_method, "DELETE") == 0){
+    }else if(strcmp(request_info->request_method, "DELETE") == 0){
       todos_delete(conn, todo_id);
     }
   }
