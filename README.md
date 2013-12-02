@@ -13,4 +13,4 @@ make
 ## Tests
 
 ### Integration
-Integration tests are written entirely in ruby, using the rspec gem and the net/http module to do http requests.
+Integration tests are written entirely in ruby, using the rspec gem and the httparty gem to do http requests.
