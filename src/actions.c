@@ -81,3 +81,20 @@ void todos_delete(struct mg_connection *conn, int todo_id){
     "\r\n"
   );
 }
+
+void todos_show(struct mg_connection *conn, int todo_id){
+  json_object *todo = todo_findByID(todo_id);
+
+  if(todo){
+    const char *todo_json = json_object_to_json_string(todo);
+
+    mg_printf(conn,
+      "HTTP/1.1 200 OK\r\n"
+      "Content-Type: application/json; charset=utf-8\r\n"
+      "Content-Length: %d\r\n"
+      "\r\n"
+      "%s",
+      (int) strlen(todo_json), todo_json
+    );
+  }
+}

@@ -1,6 +1,7 @@
 var app = app || {};
 (function(){
   app.Todo = Backbone.Model.extend({
+    urlRoot: '/todos',
     defaults: {
       text: '',
       status: ''

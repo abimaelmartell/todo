@@ -38,6 +38,8 @@ int event_handler(struct mg_event *event){
       todos_update(conn, todo_id);
     }else if(strcmp(request_info->request_method, "DELETE") == 0){
       todos_delete(conn, todo_id);
+    }else if(strcmp(request_info->request_method, "GET") == 0){
+      todos_show(conn, todo_id);
     }
   }
 

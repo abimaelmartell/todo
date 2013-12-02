@@ -54,16 +54,21 @@ json_object *todo_findByID(int todo_id){
   char sql[1000];
   int rc;
   sqlite3_stmt *stmt;
-  json_object *todo = json_object_new_object(), *id, *text, *status;
+  json_object *todo = NULL, *id, *text, *status;
 
   sqlite3_mutex_enter(sqlite3_db_mutex(db));
   sprintf(sql, "SELECT * FROM todos WHERE id=%d", todo_id);
 
   rc = sqlite3_prepare_v2(db, sql, sizeof(sql), &stmt, NULL);
-  if(sqlite3_step(stmt) == SQLITE_ERROR){
+
+  rc = sqlite3_step(stmt);
+
+  if(rc == SQLITE_ERROR){
     printf("SQL Error: %s\n", sqlite3_errmsg(db));
     return NULL;
-  }else{
+  }else if(rc == SQLITE_ROW){
+    todo = json_object_new_object();
+
     id = json_object_new_int(sqlite3_column_int(stmt, 0));
     text = json_object_new_string((const char *)sqlite3_column_text(stmt, 1));
     status = json_object_new_int(sqlite3_column_int(stmt, 2));
