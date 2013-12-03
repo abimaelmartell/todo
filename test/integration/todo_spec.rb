@@ -80,14 +80,13 @@ describe 'Integration' do
 
   describe 'GET /todos/[:id]' do
     it 'should render an existing todo' do
-      todo = JSON.parse(post('/todos', body: { text: 'this is an existing todo' }.to_json).body)
+      todo = post '/todos', body: { text: 'this is an existing todo' }.to_json
       
       res = get "/todos/#{todo['id']}"
-      todo_json = JSON.parse res.body
 
       res.code.should eq(200)
       res.content_type.should eq('application/json')
-      todo_json['text'].should eq('this is an existing todo')
+      res['text'].should eq('this is an existing todo')
     end
   end
 end
