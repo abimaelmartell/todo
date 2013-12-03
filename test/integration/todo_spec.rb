@@ -43,25 +43,24 @@ describe 'Integration' do
 
   describe 'POST /todos' do
     it 'should create a new todo' do
-      todos_count = JSON.parse(get('/todos').body).count
+      todos_count = get('/todos').count
       post '/todos', body: { text: 'buy some milk' }.to_json
-      new_todos_count = JSON.parse(get('/todos').body).count
+      new_todos_count = get('/todos').count
       new_todos_count.should be > todos_count
     end
 
     it 'should return created todo json' do
       todo = { text: 'testing this thing :)' }
-      res = post '/todos', body: todo.to_json
-      todo_json = JSON.parse(res.body)
+      todo_json = post '/todos', body: todo.to_json
       todo_json['text'].should eq(todo[:text])
     end
   end
 
   describe 'PUT /todos/[:id]' do
     it 'should update an existing todo' do
-      todo = JSON.parse(post('/todos', body: { text: 'this is an existing todo' }.to_json).body)
+      todo = post '/todos', body: { text: 'this is an existing todo' }.to_json
 
-      updated = JSON.parse(put("/todos/#{todo['id']}", body: { text: 'new text', status: 1 }.to_json).body)
+      updated = put "/todos/#{todo['id']}", body: { text: 'new text', status: 1 }.to_json
 
       updated['status'].should eq(1)
       updated['text'].should eq('new text')
@@ -70,7 +69,7 @@ describe 'Integration' do
 
   describe 'DELETE /todos/[:id]' do
     it 'should delete an existing todo' do
-      todo = JSON.parse(post('/todos', body: { text: 'this is an existing todo' }.to_json).body)
+      todo = post '/todos', body: { text: 'this is an existing todo' }.to_json
 
       delete "/todos/#{todo['id']}"
 
