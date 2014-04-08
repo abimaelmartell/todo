@@ -10,22 +10,26 @@ MONGOOSE_HOME = vendor/mongoose
 MONGOOSE_INC = $(MONGOOSE_HOME)
 MONGOOSE_SOURCE = $(MONGOOSE_HOME)/mongoose.c
 
-CFLAGS  = -W -Wall -I. -I$(JSON_INC) -I$(SQLITE_INC) -I$(MONGOOSE_INC)
-LIBS =  -lpthread -ldl -lc -ldl $(JSON_LIB)
+OBJECTS = src/actions.o src/model.o src/todo.o src/main.o
+CFLAGS = -std=c99 -W -Wall -Werror -Wextra -I. -I$(JSON_INC) -I$(SQLITE_INC) -I$(MONGOOSE_INC)
+LIBS = -lpthread -ldl -lc -ldl $(JSON_LIB)
 TARGET = todo
-
 
 .PHONY: default all clean
 
 default: $(JSON_LIB) $(TARGET)
 all: default
 
+%.o: %.c $(CIVETWEB_LIB)
+	$(CC) -c $< -o $@ $(INC) $(CFLAGS)
+
 $(JSON_LIB):
 	-cd $(JSON_HOME) && make clean
 	cd $(JSON_HOME) && ./autogen.sh && ./configure && make
 
-$(TARGET): $(JSON_LIB)
-	$(CC) src/main.c src/model.c src/actions.c src/todo.c $(MONGOOSE_SOURCE) $(SQLITE_SOURCE) -o $(TARGET) $(CFLAGS) $(LIBS)
+$(TARGET): $(JSON_LIB) $(OBJECTS)
+	$(CC) $(OBJECTS) $(MONGOOSE_SOURCE) $(SQLITE_SOURCE) -o $(TARGET) $(CFLAGS) $(LIBS)
 
 clean:
+	rm src/*.o
 	rm todo
