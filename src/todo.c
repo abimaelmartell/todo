@@ -1,4 +1,5 @@
-// Abimael Martell @ 2013
+// Abimael Martell @ 2014
+// See LICENSE
 
 #include "todo.h"
 

@@ -1,4 +1,6 @@
-// Abimael Martell @ 2013
+// Abimael Martell @ 2014
+// See LICENSE
+
 #ifndef TODO_H
 #define TODO_H
 
