@@ -7,9 +7,9 @@ struct mg_server *server;
 
 int event_handler (struct mg_connection *conn, enum mg_event ev)
 {
-    regex_t regex;
     int rc;
     enum mg_result res = MG_FALSE;
+    regex_t regex;
 
     if (ev == MG_AUTH) {
         return MG_TRUE;
@@ -24,12 +24,14 @@ int event_handler (struct mg_connection *conn, enum mg_event ev)
 
     rc = regcomp(&regex, TODO_UPDATE_REGEX, 0);
 
-    if (strcmp(conn->uri, TODO_LIST_URL) == 0 && strcmp(conn->request_method, "GET") == 0) {
-        todos_index(conn);
-        res = MG_TRUE;
-    } else if (strcmp(conn->uri, TODO_CREATE_URL) == 0 && strcmp(conn->request_method, "POST") == 0) {
-        todos_create(conn);
-        res = MG_TRUE;
+    if (strcmp(conn->uri, TODOS_URL) == 0) {
+        if(strcmp(conn->request_method, "GET") == 0) {
+            todos_index(conn);
+            res = MG_TRUE;
+        } else if (strcmp(conn->request_method, "POST") == 0) {
+            todos_create(conn);
+            res = MG_TRUE;
+        }
     } else if (regexec(&regex, conn->uri, 0, NULL, 0) == 0) {
         int todo_id = atoi(&conn->uri[7]);
         if (strcmp(conn->request_method, "PUT") == 0) {

@@ -11,8 +11,7 @@
 #include <jansson.h>
 
 /* URL's */
-#define TODO_CREATE_URL   "/todos"
-#define TODO_LIST_URL     "/todos"
+#define TODOS_URL "/todos"
 #define TODO_UPDATE_REGEX "^\\/todos\\/[[:digit:]]"
 
 extern sqlite3 *db;
