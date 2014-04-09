@@ -3,9 +3,9 @@
 #include "todo.h"
 
 void todos_index(struct mg_connection *conn){
-  json_object *todos = todo_findAll();
+  json_t *todos = todo_findAll();
 
-  const char *todos_string = json_object_to_json_string(todos);
+  const char *todos_string = json_dumps(todos, 0);
 
   mg_printf(conn,
     "HTTP/1.1 200 OK\r\n"
@@ -20,20 +20,21 @@ void todos_index(struct mg_connection *conn){
 
 void todos_create(struct mg_connection *conn){
   int id;
-  json_object *data, *text, *todo;
+  json_t *data, *text, *todo;
+  json_error_t json_error;
 
-  data = json_tokener_parse(conn->content);
+  data = json_loads(conn->content, 0, &json_error);
 
-  text = json_object_object_get(data, "text");
+  text = json_object_get(data, "text");
 
-  const char *todo_text = json_object_get_string(text);
+  const char *todo_text = json_string_value(text);
 
   id = todo_create((char *) todo_text);
 
   if(id != -1){
     todo = todo_findByID(id);
 
-    const char *todo_string = json_object_to_json_string(todo);
+    const char *todo_string = json_dumps(todo, 0);
 
     mg_printf(conn,
       "HTTP/1.1 200 OK\r\n"
@@ -47,13 +48,14 @@ void todos_create(struct mg_connection *conn){
 }
 
 void todos_update(struct mg_connection *conn, int todo_id){
-  json_object *data, *todo;
+  json_t *data, *todo;
+  json_error_t json_error;
 
-  data = json_tokener_parse(conn->content);
+  data = json_loads(conn->content, 0, &json_error);
 
   todo = todo_updateAttributes(todo_id, data);
 
-  const char *todo_string = json_object_to_json_string(todo);
+  const char *todo_string = json_dumps(todo, 0);
 
   mg_printf(conn,
     "HTTP/1.1 200 OK\r\n"
@@ -79,10 +81,10 @@ void todos_delete(struct mg_connection *conn, int todo_id){
 }
 
 void todos_show(struct mg_connection *conn, int todo_id){
-  json_object *todo = todo_findByID(todo_id);
+  json_t *todo = todo_findByID(todo_id);
 
   if(todo){
-    const char *todo_json = json_object_to_json_string(todo);
+    const char *todo_json = json_dumps(todo, 0);
 
     mg_printf(conn,
       "HTTP/1.1 200 OK\r\n"

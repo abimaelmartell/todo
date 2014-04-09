@@ -4,7 +4,7 @@
 #include <string.h>
 #include <mongoose.h>
 #include <sqlite3.h>
-#include <json.h>
+#include <jansson.h>
 #include <regex.h>
 
 #include "model.h"

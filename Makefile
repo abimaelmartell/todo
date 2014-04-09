@@ -1,6 +1,6 @@
-JSON_HOME = vendor/json-c
-JSON_INC = $(JSON_HOME)
-JSON_LIB = $(JSON_HOME)/.libs/libjson-c.a
+JANSSON_HOME = vendor/jansson
+JANSSON_INC = $(JANSSON_HOME)/src
+JANSSON_LIB = $(JANSSON_HOME)/src/.libs/libjansson.a
 
 SQLITE_HOME = vendor/sqlite3
 SQLITE_INC = $(SQLITE_HOME)
@@ -11,23 +11,23 @@ MONGOOSE_INC = $(MONGOOSE_HOME)
 MONGOOSE_SOURCE = $(MONGOOSE_HOME)/mongoose.c
 
 OBJECTS = src/actions.o src/model.o src/todo.o src/main.o
-CFLAGS = -std=c99 -W -Wall -Werror -Wextra -I. -I$(JSON_INC) -I$(SQLITE_INC) -I$(MONGOOSE_INC)
-LIBS = -lpthread -ldl -lc -ldl $(JSON_LIB)
+CFLAGS = -std=c99 -W -Wall -Werror -Wextra
+INC = -I. -I$(JANSSON_INC) -I$(SQLITE_INC) -I$(MONGOOSE_INC)
+LIBS = -lpthread -ldl -lc -ldl $(JANSSON_LIB)
 TARGET = todo
 
 .PHONY: default all clean
 
-default: $(JSON_LIB) $(TARGET)
+default: $(JANSSON_LIB) $(TARGET)
 all: default
 
 %.o: %.c $(CIVETWEB_LIB)
 	$(CC) -c $< -o $@ $(INC) $(CFLAGS)
 
-$(JSON_LIB):
-	-cd $(JSON_HOME) && make clean
-	cd $(JSON_HOME) && ./autogen.sh && ./configure && make
+$(JANSSON_LIB):
+	cd $(JANSSON_HOME) && autoreconf -i  && ./configure && make
 
-$(TARGET): $(JSON_LIB) $(OBJECTS)
+$(TARGET): $(JANSSON_LIB) $(OBJECTS)
 	$(CC) $(OBJECTS) $(MONGOOSE_SOURCE) $(SQLITE_SOURCE) -o $(TARGET) $(CFLAGS) $(LIBS)
 
 clean:
