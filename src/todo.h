@@ -14,10 +14,8 @@
 #define TODO_LIST_URL     "/todos"
 #define TODO_UPDATE_REGEX "^\\/todos\\/[[:digit:]]"
 
-#define HTTP_METHOD_HEADER "X-HTTP-Method-Override"
-
 extern sqlite3 *db;
 extern struct mg_server *server;
-extern int event_handler(struct mg_connection *conn, enum mg_event ev);
-extern void initialize(void);
-extern void term(void);
+extern int event_handler (struct mg_connection *conn, enum mg_event ev);
+extern void initialize (void);
+extern void term (void);

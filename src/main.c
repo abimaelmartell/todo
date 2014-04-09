@@ -2,11 +2,12 @@
 
 #include "todo.h"
 
-int main(void){
-  initialize();
+int main (void)
+{
+    initialize();
 
-  term();
+    term();
 
-  return 0;
+    return 0;
 }
 
