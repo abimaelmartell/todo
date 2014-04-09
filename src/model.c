@@ -2,7 +2,7 @@
 
 #include "todo.h"
 
-json_t *todo_findAll (void)
+json_t *todo_find_all (void)
 {
     sqlite3_mutex_enter(sqlite3_db_mutex(db));
     sqlite3_stmt *stmt;
@@ -53,7 +53,7 @@ int todo_create (char *text)
     return return_id;
 }
 
-json_t *todo_findByID (int todo_id)
+json_t *todo_find_by_id (int todo_id)
 {
     char sql[1000];
     int rc;
@@ -88,7 +88,7 @@ json_t *todo_findByID (int todo_id)
     return todo;
 }
 
-json_t *todo_updateAttributes (int todo_id, json_t *todo)
+json_t *todo_update_attributes (int todo_id, json_t *todo)
 {
     json_t *text, *status;
     char sql[1000], *errBuf;

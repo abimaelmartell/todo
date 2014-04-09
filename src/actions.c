@@ -4,7 +4,7 @@
 
 void todos_index (struct mg_connection *conn)
 {
-    json_t *todos = todo_findAll();
+    json_t *todos = todo_find_all();
 
     const char *todos_string = json_dumps(todos, 0);
 
@@ -41,7 +41,7 @@ void todos_create (struct mg_connection *conn)
     id = todo_create((char *) todo_text);
 
     if (id != -1) {
-        todo = todo_findByID(id);
+        todo = todo_find_by_id(id);
 
         const char *todo_string = json_dumps(todo, 0);
 
@@ -72,7 +72,7 @@ void todos_update (struct mg_connection *conn, int todo_id)
         return;
     }
 
-    todo = todo_updateAttributes(todo_id, data);
+    todo = todo_update_attributes(todo_id, data);
 
     const char *todo_string = json_dumps(todo, 0);
 
@@ -105,7 +105,7 @@ void todos_delete (struct mg_connection *conn, int todo_id)
 
 void todos_show (struct mg_connection *conn, int todo_id)
 {
-    json_t *todo = todo_findByID(todo_id);
+    json_t *todo = todo_find_by_id(todo_id);
 
     if (todo) {
         const char *todo_json = json_dumps(todo, 0);
