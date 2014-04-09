@@ -3,42 +3,36 @@
 #include "todo.h"
 
 sqlite3 *db;
-struct mg_context *ctx;
+struct mg_server *server;
 
-static const char *options[] = {
-  "document_root", "public",
-  "listening_ports", "3000",
-  NULL
-};
-
-int event_handler(struct mg_event *event){
-  struct mg_request_info *request_info = event->request_info;
-  struct mg_connection *conn = event->conn;
+int event_handler(struct mg_connection *conn, enum mg_event ev){
   regex_t regex;
   int rc;
 
-  if (event->type != MG_REQUEST_BEGIN) return 0;
+  if(ev == MG_AUTH) return MG_TRUE;
+
+  if(ev != MG_REQUEST) return MG_FALSE;
 
   printf("\x1B[0;32m[%s]\x1B[0m %s\n",
-    request_info->request_method,
-    request_info->uri
+    conn->request_method,
+    conn->uri
   );
 
   rc = regcomp(&regex, TODO_UPDATE_REGEX, 0);
 
-  if(strcmp(request_info->uri, TODO_LIST_URL) == 0 &&
-          strcmp(request_info->request_method, "GET") == 0){
+  if(strcmp(conn->uri, TODO_LIST_URL) == 0 &&
+          strcmp(conn->request_method, "GET") == 0){
     todos_index(conn);
-  }else if(strcmp(request_info->uri, TODO_CREATE_URL) == 0 &&
-          strcmp(request_info->request_method, "POST") == 0){
+  }else if(strcmp(conn->uri, TODO_CREATE_URL) == 0 &&
+          strcmp(conn->request_method, "POST") == 0){
     todos_create(conn);
-  }else if(regexec(&regex, request_info->uri, 0, NULL, 0) == 0){
-    int todo_id = atoi(&request_info->uri[7]);
-    if(strcmp(request_info->request_method, "PUT") == 0){
+  }else if(regexec(&regex, conn->uri, 0, NULL, 0) == 0){
+    int todo_id = atoi(&conn->uri[7]);
+    if(strcmp(conn->request_method, "PUT") == 0){
       todos_update(conn, todo_id);
-    }else if(strcmp(request_info->request_method, "DELETE") == 0){
+    }else if(strcmp(conn->request_method, "DELETE") == 0){
       todos_delete(conn, todo_id);
-    }else if(strcmp(request_info->request_method, "GET") == 0){
+    }else if(strcmp(conn->request_method, "GET") == 0){
       todos_show(conn, todo_id);
     }
   }
@@ -58,10 +52,18 @@ void initialize(){
     return;
   }
 
-  ctx = mg_start(options, &event_handler, NULL);
+  server = mg_create_server(NULL, event_handler);
+
+  mg_set_option(server, "document_root", "public");
+  mg_set_option(server, "listening_port", "3000");
+
+  printf("Starting on port %s\n", mg_get_option(server, "listening_port"));
+  for (;;) {
+    mg_poll_server(server, 1000);
+  }
 }
 
 void term(){
   sqlite3_close(db);
-  mg_stop(ctx);
+  mg_destroy_server(&server);
 }

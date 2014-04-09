@@ -19,13 +19,10 @@ void todos_index(struct mg_connection *conn){
 
 
 void todos_create(struct mg_connection *conn){
-  char post_data[1024];
-  int post_len, id;
+  int id;
   json_object *data, *text, *todo;
 
-  post_len = mg_read(conn, post_data, sizeof(post_data));
-
-  data = json_tokener_parse(post_data);
+  data = json_tokener_parse(conn->content);
 
   text = json_object_object_get(data, "text");
 
@@ -50,13 +47,9 @@ void todos_create(struct mg_connection *conn){
 }
 
 void todos_update(struct mg_connection *conn, int todo_id){
-  char post_data[1024];
-  int post_len;
   json_object *data, *todo;
 
-  post_len = mg_read(conn, post_data, sizeof(post_data));
-
-  data = json_tokener_parse(post_data);
+  data = json_tokener_parse(conn->content);
 
   todo = todo_updateAttributes(todo_id, data);
 

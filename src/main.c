@@ -5,8 +5,6 @@
 int main(void){
   initialize();
 
-  getchar();
-
   term();
 
   return 0;
