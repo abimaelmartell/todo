@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <regex.h>
+#include <time.h>
 
 #include <mongoose.h>
 #include <sqlite3.h>
@@ -16,6 +17,14 @@
 
 extern sqlite3 *db;
 extern struct mg_server *server;
+
+enum log_level {
+    LOG_INFO,
+    LOG_ERROR
+};
+
+#define LOG_INFO_TPL  "\x1B[0;32m[%s] %s\x1B[0m\n"
+#define LOG_ERROR_TPL "\x1B[0;31m[%s] %s\x1B[0m\n"
 
 /**
  * Event handler for mongoose
@@ -31,6 +40,11 @@ extern void initialize (void);
  * Close web server and database
  */
 extern void term (void);
+
+/**
+ * Logs a line to stdout
+ */
+extern void log_line(char *content, enum log_level level);
 
 //
 // Actions

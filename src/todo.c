@@ -8,6 +8,7 @@ struct mg_server *server;
 int event_handler (struct mg_connection *conn, enum mg_event ev)
 {
     int rc;
+    char tmpBuf[256];
     enum mg_result res = MG_FALSE;
     regex_t regex;
 
@@ -17,10 +18,8 @@ int event_handler (struct mg_connection *conn, enum mg_event ev)
         return MG_FALSE;
     }
 
-    printf("\x1B[0;32m[%s]\x1B[0m %s\n",
-        conn->request_method,
-        conn->uri
-    );
+    sprintf(tmpBuf, "%s %s", conn->request_method, conn->uri);
+    log_line(tmpBuf, LOG_INFO);
 
     rc = regcomp(&regex, TODO_UPDATE_REGEX, 0);
 
@@ -54,10 +53,13 @@ int event_handler (struct mg_connection *conn, enum mg_event ev)
 void initialize (void)
 {
     int rc;
+    char tmpBuf[80];
 
     rc = sqlite3_open("data/todos.db", &db);
+
     if (rc) {
-        printf("Cant open database %s\n", sqlite3_errmsg(db));
+        sprintf(tmpBuf, "SQL error: %s", sqlite3_errmsg(db));
+        log_line(tmpBuf, LOG_ERROR);
         sqlite3_close(db);
         return;
     }
@@ -67,7 +69,8 @@ void initialize (void)
     mg_set_option(server, "document_root", "public");
     mg_set_option(server, "listening_port", "3000");
 
-    printf("Starting on port %s\n", mg_get_option(server, "listening_port"));
+    sprintf(tmpBuf, "Starting on port %s", mg_get_option(server, "listening_port"));
+    log_line(tmpBuf, LOG_INFO);
   
     for (;;) {
         mg_poll_server(server, 1000);
@@ -78,4 +81,20 @@ void term (void)
 {
     sqlite3_close(db);
     mg_destroy_server(&server);
+}
+
+void log_line (char *content, enum log_level level)
+{
+    time_t current_time;
+    struct tm *p;
+    char time_str[80];
+
+    current_time = time(NULL);
+    p = localtime(&current_time);
+    strftime(time_str, sizeof(time_str), "%D %r", p);
+
+    if (level == LOG_INFO)
+        printf(LOG_INFO_TPL, time_str, content);
+    else if(level == LOG_ERROR)
+        printf(LOG_ERROR_TPL, time_str, content);
 }

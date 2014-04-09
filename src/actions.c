@@ -23,6 +23,7 @@ void todos_index (struct mg_connection *conn)
 void todos_create (struct mg_connection *conn)
 {
     int id;
+    char tmpBuf[128];
     json_t *data, *text, *todo;
     json_error_t error;
 
@@ -30,7 +31,8 @@ void todos_create (struct mg_connection *conn)
 
     if (data == NULL) {
         // json error
-        fprintf(stderr, "error: on line %d: %s\n", error.line, error.text);
+        sprintf(tmpBuf, "JSON error: on line %d: %s", error.line, error.text);
+        log_line(tmpBuf, LOG_ERROR);
         return;
     }
 
@@ -61,6 +63,7 @@ void todos_create (struct mg_connection *conn)
 
 void todos_update (struct mg_connection *conn, int todo_id)
 {
+    char tmpBuf[128];
     json_t *data, *todo;
     json_error_t error;
 
@@ -68,7 +71,8 @@ void todos_update (struct mg_connection *conn, int todo_id)
 
     if (data == NULL) {
         // json error
-        fprintf(stderr, "error: on line %d: %s\n", error.line, error.text);
+        sprintf(tmpBuf, "JSON error: on line %d: %s", error.line, error.text);
+        log_line(tmpBuf, LOG_ERROR);
         return;
     }
 
