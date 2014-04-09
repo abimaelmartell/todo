@@ -50,7 +50,7 @@ int event_handler (struct mg_connection *conn, enum mg_event ev)
     return res;
 }
 
-void initialize (void)
+void initialize (char *http_port)
 {
     int rc;
     char tmpBuf[80];
@@ -67,7 +67,7 @@ void initialize (void)
     server = mg_create_server(NULL, event_handler);
 
     mg_set_option(server, "document_root", "public");
-    mg_set_option(server, "listening_port", "3000");
+    mg_set_option(server, "listening_port", http_port);
 
     sprintf(tmpBuf, "Starting on port %s", mg_get_option(server, "listening_port"));
     log_line(tmpBuf, LOG_INFO);
