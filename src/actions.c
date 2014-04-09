@@ -16,15 +16,23 @@ void todos_index (struct mg_connection *conn)
         "%s",
         (int) strlen(todos_string), todos_string
     );
+
+    json_decref(todos);
 }
 
 void todos_create (struct mg_connection *conn)
 {
     int id;
     json_t *data, *text, *todo;
-    json_error_t json_error;
+    json_error_t error;
 
-    data = json_loads(conn->content, 0, &json_error);
+    data = json_loads(conn->content, 0, &error);
+
+    if (data == NULL) {
+        // json error
+        fprintf(stderr, "error: on line %d: %s\n", error.line, error.text);
+        return;
+    }
 
     text = json_object_get(data, "text");
 
@@ -45,15 +53,24 @@ void todos_create (struct mg_connection *conn)
             "%s",
             (int) strlen(todo_string), todo_string
         );
+
+        json_decref(todo);
     }
+    json_decref(data);
 }
 
 void todos_update (struct mg_connection *conn, int todo_id)
 {
     json_t *data, *todo;
-    json_error_t json_error;
+    json_error_t error;
 
-    data = json_loads(conn->content, 0, &json_error);
+    data = json_loads(conn->content, 0, &error);
+
+    if (data == NULL) {
+        // json error
+        fprintf(stderr, "error: on line %d: %s\n", error.line, error.text);
+        return;
+    }
 
     todo = todo_updateAttributes(todo_id, data);
 
@@ -67,6 +84,9 @@ void todos_update (struct mg_connection *conn, int todo_id)
         "%s",
         (int) strlen(todo_string), todo_string
     );
+
+    json_decref(todo);
+    json_decref(data);
 }
 
 void todos_delete (struct mg_connection *conn, int todo_id)
@@ -98,5 +118,7 @@ void todos_show (struct mg_connection *conn, int todo_id)
             "%s",
             (int) strlen(todo_json), todo_json
         );
+
+        json_decref(todo);
     }
 }
