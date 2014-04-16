@@ -24,11 +24,13 @@ void todos_index (struct mg_connection *conn)
 void todos_create (struct mg_connection *conn)
 {
     int id;
-    char tmpBuf[128];
+    char tmpBuf[1024];
     json_t *data, *text, *todo;
     json_error_t error;
 
-    data = json_loads(conn->content, 0, &error);
+    sprintf(tmpBuf, "%.*s", (int) conn->content_len, conn->content);
+
+    data = json_loads(tmpBuf, 0, &error);
 
     if (data == NULL) {
         // json error
@@ -64,11 +66,13 @@ void todos_create (struct mg_connection *conn)
 
 void todos_update (struct mg_connection *conn, int todo_id)
 {
-    char tmpBuf[128];
+    char tmpBuf[1024];
     json_t *data, *todo;
     json_error_t error;
 
-    data = json_loads(conn->content, 0, &error);
+    sprintf(tmpBuf, "%.*s", (int) conn->content_len, conn->content);
+
+    data = json_loads(tmpBuf, 0, &error);
 
     if (data == NULL) {
         // json error
