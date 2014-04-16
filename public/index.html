@@ -1,34 +1,38 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8" />
-    <title>Todo List C</title>
-    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Open+Sans">
-    <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.min.css" />
-    <link rel="stylesheet" type="text/css" href="/css/main.css" />
-  </head>
-  <body>
-    <div class="container">
-      <h1>Todo List</h1>
-      <form action="todos/create" method="post">
-        <input id="todo-text" class="form-control" type="text" name="text" placeholder="What needs to be done?" required="true" autofocus="true"/>
-      </form>
-      <ul class="todos">
-      </ul>
-      <a id="delete-completed" href="#"><i class="fa fa-trash-o"></i> Delete Competed</a>
-    </div>
-    <script type="text/template" id="todo-template">
-      <% if(status == 0){ %>
-        <i class="fa fa-square-o check"></i>
-      <% }else{ %>
-        <i class="fa fa-check-square-o check "></i>
-      <% } %>
-      <span><%- text %></span>
-      <input type="text" value="<%- text %>" />
-    </script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.0/backbone-min.js"></script>
-    <script src="/js/app.js"></script>
-  </body>
+    <head>
+        <meta charset="utf-8" />
+        <title>Todo List C</title>
+        <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Open+Sans">
+        <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.min.css" />
+        <link rel="stylesheet" type="text/css" href="/css/main.css" />
+    </head>
+    <body>
+        <div class="container">
+            <h1>Todo List</h1>
+            <form action="todos/create" method="post">
+                <input id="todo-text" class="form-control" type="text" name="text" placeholder="What needs to be done?" required="true" autofocus="true"/>
+            </form>
+            <ul class="todos">
+            </ul>
+            <a id="delete-completed" href="#"><i class="fa fa-trash-o"></i> Delete Competed</a>
+            <footer>
+                <p>© 2014 <a href="http://abimaelmartell.com">Abimael Martell</a></p>
+            </footer>
+        </div>
+        <a class="fork-me" href="https://github.com/abimaelmartell/todo"></a>
+        <script type="text/template" id="todo-template">
+            <% if(status == 0){ %>
+                <i class="fa fa-square-o check"></i>
+                <% }else{ %>
+                <i class="fa fa-check-square-o check "></i>
+                <% } %>
+            <span><%- text %></span>
+            <input type="text" value="<%- text %>" />
+        </script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.0/backbone-min.js"></script>
+        <script src="/js/app.js"></script>
+    </body>
 </html>
